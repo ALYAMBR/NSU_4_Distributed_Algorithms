@@ -1,3 +1,8 @@
+/*----------------------------------------------------------
+* Made by Nikita Radeev.
+* Numbers in comments equal numbers of lines in pseudo-code.
+----------------------------------------------------------*/
+
 package se.kth.ict.id2203.components.epfd;
 
 import org.slf4j.Logger;
@@ -20,7 +25,6 @@ public class Epfd extends ComponentDefinition {
 
 	private static final Logger logger = LoggerFactory.getLogger(Epfd.class);
 
-	private Negative<PerfectPointToPointLink> pp2pNeg;
 	private Negative<EventuallyPerfectFailureDetector> epfd;
 	private Positive<PerfectPointToPointLink> pp2pPos;
 
@@ -100,7 +104,6 @@ public class Epfd extends ComponentDefinition {
 		suspected = new HashSet<>(); // 4
 		delay = init.getInitialDelay(); // 5
 		deltaDelay = init.getDeltaDelay();
-		pp2pNeg = provides(PerfectPointToPointLink.class);
 		epfd = provides(EventuallyPerfectFailureDetector.class);
  		pp2pPos = requires(PerfectPointToPointLink.class);
 		subscribe(handleStart, control);
