@@ -1,14 +1,8 @@
-/*----------------------------------------------------------
-* Made by Nikita Radeev.
-* Numbers in comments equal numbers of lines in pseudo-code.
-----------------------------------------------------------*/
-
 package se.kth.ict.id2203.components.epfd;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import se.kth.ict.id2203.pa.epfd.Pp2pMessage;
 import se.kth.ict.id2203.ports.epfd.EventuallyPerfectFailureDetector;
 import se.kth.ict.id2203.ports.epfd.Restore;
 import se.kth.ict.id2203.ports.epfd.Suspect;
@@ -71,8 +65,11 @@ public class Epfd extends ComponentDefinition {
 	private Handler<HeartbeatRequestMessage> handleRequest = new Handler<HeartbeatRequestMessage>(){
 		@Override
 		public void handle(HeartbeatRequestMessage heartbeatRequestMessage) {
-			trigger(new Pp2pSend(heartbeatRequestMessage.getSource(),
-					new HeartbeatReplyMessage(selfAddress, seqnum)), pp2pPos); // 22
+			Address process = heartbeatRequestMessage.getSource();
+			long delivSeqnum = heartbeatRequestMessage.getSeqnum();
+			logger.info("heartbeat from " + process.toString());
+			trigger(new Pp2pSend(process,
+					new HeartbeatReplyMessage(selfAddress, delivSeqnum)), pp2pPos); // 22
 		}
 	};
 
@@ -83,6 +80,7 @@ public class Epfd extends ComponentDefinition {
 			long sn = heartbeatReplyMessage.getSeqnum(); // 24
 			if(sn == seqnum || suspected.contains(process)){ // 24
 				alive.add(process); // 25
+				logger.info("alive " + process.toString());
 			}
 		}
 	};
@@ -101,6 +99,8 @@ public class Epfd extends ComponentDefinition {
 		alive = new HashSet<>(init.getAllAddresses()); // 3
 		allProcesses = new HashSet<>(init.getAllAddresses()); // П
 		selfAddress = init.getSelfAddress();
+		alive.remove(selfAddress);
+		allProcesses.remove(selfAddress);
 		suspected = new HashSet<>(); // 4
 		delay = init.getInitialDelay(); // 5
 		deltaDelay = init.getDeltaDelay();
