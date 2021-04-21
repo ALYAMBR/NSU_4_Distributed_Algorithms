@@ -1,21 +1,20 @@
 package se.kth.ict.id2203.components.beb;
 
+import se.kth.ict.id2203.pa.broadcast.BebMessage;
+import se.kth.ict.id2203.ports.beb.BebDeliver;
 import se.kth.ict.id2203.ports.pp2p.Pp2pDeliver;
 import se.sics.kompics.address.Address;
 
 public class BebDataMessage extends Pp2pDeliver {
-    private static final long serialVersionUID = 187657487485623268L;
-    private String message;
-    public BebDataMessage(Address source, String message) {
-        super(source);
-        this.message = message;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	private static final long serialVersionUID = 918555512222333366L;
+	private BebDeliver data;
+	
+	protected BebDataMessage(Address source, BebDeliver data) {
+		super(source);
+		this.data = data;
+	}
+	
+	public BebDeliver getData() {
+		return data;
+	}
 }
